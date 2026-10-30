@@ -1,6 +1,6 @@
 # flutter_praktikum_4
 
-A new Flutter project.
+praktikum ke 4 dari mata kuliah pemrograman mobile lanjut.
 
 ## Getting Started
 
