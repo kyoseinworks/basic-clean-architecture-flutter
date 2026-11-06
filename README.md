@@ -1,6 +1,6 @@
-# flutter_praktikum_4
+# flutter_praktikum_4 dan flutter_praktikum_5
 
-praktikum ke 4 dari mata kuliah pemrograman mobile lanjut.
+praktikum ke 4 dari mata kuliah pemrograman mobile lanjut dan dilanjutkan praktikum 5 membuat REST api dan remote
 
 ## Getting Started
 
