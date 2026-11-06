@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_praktikum_4/domain/entities/mahasiswa.dart';
-import 'package:flutter_praktikum_4/presentation/bloc/mahasiswa_bloc.dart';
-import 'package:flutter_praktikum_4/presentation/bloc/mahasiswa_event.dart';
-import 'package:flutter_praktikum_4/presentation/bloc/mahasiswa_state.dart';
+
+import '../../domain/entities/mahasiswa.dart';
+import '../bloc/mahasiswa_bloc.dart';
+import '../bloc/mahasiswa_event.dart';
+import '../bloc/mahasiswa_state.dart';
 
 class MahasiswaPage extends StatelessWidget {
   const MahasiswaPage({super.key});

@@ -1,33 +1,31 @@
-import 'package:flutter_praktikum_4/domain/entities/mahasiswa.dart';
-import 'package:flutter_praktikum_4/domain/repositories/mahasiswa_repositories.dart';
-import 'package:flutter_praktikum_4/data/data_sources/mahasiswa_local_data_sources.dart';
-import 'package:flutter_praktikum_4/data/models/mahasiswa_model.dart';
+import '../../domain/entities/mahasiswa.dart';
+import '../../domain/repositories/mahasiswa_repositories.dart';
+import '../data_sources/mahasiswa_data_source.dart';
+import '../models/mahasiswa_model.dart';
 
 class MahasiswaRepositoryImpl implements MahasiswaRepository {
-  final MahasiswaLocalDataSource localDataSource;
+  final MahasiswaDataSource dataSource;
 
-  MahasiswaRepositoryImpl({required this.localDataSource});
+  MahasiswaRepositoryImpl({required this.dataSource});
 
   @override
-  List<Mahasiswa> getAllMahasiswa() {
-    final mahasiswaModels = localDataSource.getAllMahasiswa();
-    return mahasiswaModels.map((model) => model.toEntity()).toList();
+  Future<List<Mahasiswa>> getAllMahasiswa() async {
+    final models = await dataSource.getAllMahasiswa();
+    return models.map((model) => model.toEntity()).toList();
   }
 
   @override
-  void addMahasiswa(Mahasiswa mahasiswa) {
-    final mahasiswaModel = MahasiswaModel.fromEntity(mahasiswa);
-    localDataSource.addMahasiswa(mahasiswaModel);
+  Future<void> addMahasiswa(Mahasiswa mahasiswa) async {
+    await dataSource.addMahasiswa(MahasiswaModel.fromEntity(mahasiswa));
   }
 
   @override
-  void updateMahasiswa(String nim, Mahasiswa updatedMahasiswa) {
-    final updatedModel = MahasiswaModel.fromEntity(updatedMahasiswa);
-    localDataSource.updateMahasiswa(nim, updatedModel);
+  Future<void> updateMahasiswa(String nim, Mahasiswa mahasiswa) async {
+    await dataSource.updateMahasiswa(nim, MahasiswaModel.fromEntity(mahasiswa));
   }
 
   @override
-  void deleteMahasiswa(String nim) {
-    localDataSource.deleteMahasiswa(nim);
+  Future<void> deleteMahasiswa(String nim) async {
+    await dataSource.deleteMahasiswa(nim);
   }
 }

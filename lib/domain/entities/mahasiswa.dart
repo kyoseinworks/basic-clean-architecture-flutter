@@ -15,7 +15,7 @@ class Mahasiswa {
   final String konsentrasi;
   final double ipk;
 
-  Mahasiswa({
+  const Mahasiswa({
     required this.nim,
     required this.nama,
     required this.alamat,
@@ -68,4 +68,23 @@ class Mahasiswa {
       ipk: ipk ?? this.ipk,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    nim,
+    nama,
+    alamat,
+    namaAyah,
+    namaIbu,
+    domisili,
+    noTelp,
+    email,
+    kodePost,
+    kabupaten,
+    provinsi,
+    fakultas,
+    prodi,
+    konsentrasi,
+    ipk,
+  ];
 }

@@ -1,6 +1,12 @@
-import 'package:flutter_praktikum_4/domain/entities/mahasiswa.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class MahasiswaState {}
+import '../../domain/entities/mahasiswa.dart';
+
+abstract class MahasiswaState extends Equatable {
+  const MahasiswaState();
+  @override
+  List<Object?> get props => [];
+}
 
 class MahasiswaInitial extends MahasiswaState {}
 
@@ -8,10 +14,14 @@ class MahasiswaLoading extends MahasiswaState {}
 
 class MahasiswaLoaded extends MahasiswaState {
   final List<Mahasiswa> mahasiswaList;
-  MahasiswaLoaded(this.mahasiswaList);
+  const MahasiswaLoaded(this.mahasiswaList);
+  @override
+  List<Object?> get props => [mahasiswaList];
 }
 
 class MahasiswaError extends MahasiswaState {
   final String message;
-  MahasiswaError(this.message);
+  const MahasiswaError(this.message);
+  @override
+  List<Object?> get props => [message];
 }

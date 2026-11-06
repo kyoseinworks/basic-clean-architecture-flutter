@@ -1,7 +1,7 @@
-import 'package:flutter_praktikum_4/domain/entities/mahasiswa.dart';
+import '../../domain/entities/mahasiswa.dart';
 
 class MahasiswaModel extends Mahasiswa {
-  MahasiswaModel({
+  const MahasiswaModel({
     required super.nim,
     required super.nama,
     required super.alamat,
@@ -35,7 +35,9 @@ class MahasiswaModel extends Mahasiswa {
       fakultas: json['fakultas'].toString(),
       prodi: json['prodi'].toString(),
       konsentrasi: json['konsentrasi'].toString(),
-      ipk: (json['ipk'] as num).toDouble(),
+      ipk: json['ipk'] is num
+          ? (json['ipk'] as num).toDouble()
+          : double.tryParse(json['ipk']?.toString() ?? '0') ?? 0.0,
     );
   }
 

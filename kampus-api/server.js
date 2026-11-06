@@ -14,6 +14,6 @@ app.get("/", (req, res) => {
     res.send("RESTful API Mahasiswa Pertemuan 05 berjalan ");
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log('Server runngin at http://localhost:3000');
 });
