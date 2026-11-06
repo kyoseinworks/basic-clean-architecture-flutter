@@ -31,10 +31,31 @@ const valuesFromBody = (body) => [
 ];
 
 router.get("/", (req, res) => {
-    db.query(`SELECT ${selectedColumns} FROM mahasiswa`, (err, results) => {
+    const search = req.query.search;
+    if (search !== undefined && typeof search !== "string") {
+        return res.status(400).json({ error: "Invalid search query" });
+    }
+
+    const query = search?.trim();
+    const searchableColumns = [
+        "nim",
+        ...columns
+            .filter(({ database }) => database !== "ipk")
+            .map(({ database }) => database),
+    ];
+    const whereClause = query
+        ? ` WHERE ${searchableColumns.map((column) => `${column} LIKE ?`).join(" OR ")}`
+        : "";
+    const values = query ? searchableColumns.map(() => `%${query}%`) : [];
+
+    db.query(
+        `SELECT ${selectedColumns} FROM mahasiswa${whereClause}`,
+        values,
+        (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
-    });
+        },
+    );
 });
 
 router.post("/", (req, res) => {

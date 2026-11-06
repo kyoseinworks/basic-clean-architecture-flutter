@@ -15,6 +15,15 @@ class MahasiswaRepositoryImpl implements MahasiswaRepository {
   }
 
   @override
+  Future<List<Mahasiswa>> searchMahasiswa(String query) async {
+    final normalizedQuery = query.trim();
+    if (normalizedQuery.isEmpty) return getAllMahasiswa();
+
+    final models = await dataSource.searchMahasiswa(normalizedQuery);
+    return models.map((model) => model.toEntity()).toList();
+  }
+
+  @override
   Future<void> addMahasiswa(Mahasiswa mahasiswa) async {
     await dataSource.addMahasiswa(MahasiswaModel.fromEntity(mahasiswa));
   }

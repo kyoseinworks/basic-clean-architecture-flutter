@@ -10,6 +10,15 @@ abstract class MahasiswaEvent extends Equatable {
 
 class LoadMahasiswaEvent extends MahasiswaEvent {}
 
+class SearchMahasiswaEvent extends MahasiswaEvent {
+  final String query;
+
+  const SearchMahasiswaEvent(this.query);
+
+  @override
+  List<Object?> get props => [query];
+}
+
 class AddMahasiswaEvent extends MahasiswaEvent {
   final Mahasiswa mahasiswa;
   const AddMahasiswaEvent(this.mahasiswa);
@@ -29,6 +38,5 @@ class DeleteMahasiswaEvent extends MahasiswaEvent {
   final String nim;
   const DeleteMahasiswaEvent(this.nim);
   @override
-  // TODO: implement props
   List<Object?> get props => [nim];
 }

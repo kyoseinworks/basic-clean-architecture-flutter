@@ -14,9 +14,12 @@ class MahasiswaLoading extends MahasiswaState {}
 
 class MahasiswaLoaded extends MahasiswaState {
   final List<Mahasiswa> mahasiswaList;
-  const MahasiswaLoaded(this.mahasiswaList);
+  final String query;
+
+  const MahasiswaLoaded(this.mahasiswaList, {this.query = ''});
+
   @override
-  List<Object?> get props => [mahasiswaList];
+  List<Object?> get props => [mahasiswaList, query];
 }
 
 class MahasiswaError extends MahasiswaState {

@@ -48,6 +48,32 @@ class MahasiswaLocalDataSourceImpl implements MahasiswaLocalDataSource {
   }
 
   @override
+  Future<List<MahasiswaModel>> searchMahasiswa(String query) async {
+    final normalizedQuery = query.trim().toLowerCase();
+    if (normalizedQuery.isEmpty) return getAllMahasiswa();
+
+    await Future.delayed(const Duration(milliseconds: 50));
+    return _mahasiswaList.where((mahasiswa) {
+      return [
+        mahasiswa.nim,
+        mahasiswa.nama,
+        mahasiswa.alamat,
+        mahasiswa.namaAyah,
+        mahasiswa.namaIbu,
+        mahasiswa.domisili,
+        mahasiswa.noTelp,
+        mahasiswa.email,
+        mahasiswa.kodePost,
+        mahasiswa.kabupaten,
+        mahasiswa.provinsi,
+        mahasiswa.fakultas,
+        mahasiswa.prodi,
+        mahasiswa.konsentrasi,
+      ].any((value) => value.toLowerCase().contains(normalizedQuery));
+    }).toList();
+  }
+
+  @override
   Future<void> addMahasiswa(MahasiswaModel mahasiswa) async {
     _mahasiswaList.add(mahasiswa);
   }

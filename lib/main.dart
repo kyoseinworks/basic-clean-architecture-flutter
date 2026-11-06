@@ -8,6 +8,7 @@ import 'domain/repositories/mahasiswa_repositories.dart';
 import 'domain/usecase/add_mahasiswa.dart';
 import 'domain/usecase/delete_mahasiswa.dart';
 import 'domain/usecase/get_all_mahasiswa.dart';
+import 'domain/usecase/search_mahasiswa.dart';
 import 'domain/usecase/update_mahasiswa.dart';
 import 'presentation/bloc/mahasiswa_bloc.dart';
 import 'presentation/bloc/mahasiswa_event.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
           addMahasiswa: AddMahasiswa(repo),
           updateMahasiswa: UpdateMahasiswa(repo),
           deleteMahasiswa: DeleteMahasiswa(repo),
+          searchMahasiswa: SearchMahasiswa(repo),
         )..add(LoadMahasiswaEvent()),
         child: const MahasiswaPage(),
       ),

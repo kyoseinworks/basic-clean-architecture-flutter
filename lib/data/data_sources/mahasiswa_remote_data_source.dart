@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+
 import '../models/mahasiswa_model.dart';
 import 'mahasiswa_data_source.dart';
 
@@ -18,31 +19,62 @@ class MahasiswaRemoteDataSourceImpl implements MahasiswaRemoteDataSource {
   String _extractError(http.Response response, String defaultMsg) {
     try {
       final body = jsonDecode(response.body);
-      if (body is Map && body.containsKey('error')) return body['error'].toString();
-    } catch(_) {}
+      if (body is Map && body.containsKey('error'))
+        return body['error'].toString();
+    } catch (_) {}
     return "$defaultMsg (Status: ${response.statusCode})";
   }
 
   @override
-  Future<List<MahasiswaModel>> getAllMahasiswa() async{
+  Future<List<MahasiswaModel>> getAllMahasiswa() async {
     http.Response response;
     try {
-      response = await client.get(Uri.parse(baseUrl)).timeout(const Duration(seconds: 5));
+      response = await client
+          .get(Uri.parse(baseUrl))
+          .timeout(const Duration(seconds: 1));
     } catch (e) {
-      throw Exception("Gagal terhubung ke REST API ($baseUrl).\nPastikan backend kampus-api sudah berjalan"); 
+      throw Exception(
+        "Gagal terhubung ke REST API ($baseUrl).\nPastikan backend kampus-api sudah berjalan",
+      );
     }
     if (response.statusCode == 200) {
-        final List data = jsonDecode(response.body);
-        return data.map((item) => MahasiswaModel.fromJson(item as Map<String, dynamic>)).toList();
-    } throw Exception(_extractError(response, "Gagal memuat data"));
+      final List data = jsonDecode(response.body);
+      return data
+          .map((item) => MahasiswaModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(_extractError(response, "Gagal memuat data"));
   }
+
+  @override
+  Future<List<MahasiswaModel>> searchMahasiswa(String query) async {
+    final uri = Uri.parse(baseUrl).replace(queryParameters: {'search': query});
+    http.Response response;
+    try {
+      response = await client.get(uri).timeout(const Duration(seconds: 5));
+    } catch (e) {
+      throw Exception("Gagal terhubung ke REST API ($uri): $e");
+    }
+    if (response.statusCode == 200) {
+      final List data = jsonDecode(response.body);
+      return data
+          .map((item) => MahasiswaModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(_extractError(response, "Gagal mencari data"));
+  }
+
   @override
   Future<void> addMahasiswa(MahasiswaModel mahasiswa) async {
     http.Response response;
     try {
-      response = await client.post(Uri.parse(baseUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(mahasiswa.toJson()),).timeout(const Duration(seconds: 5));
+      response = await client
+          .post(
+            Uri.parse(baseUrl),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode(mahasiswa.toJson()),
+          )
+          .timeout(const Duration(seconds: 5));
     } catch (e) {
       throw Exception("Gagal terhubung ke REST API ($baseUrl): $e");
     }
@@ -74,8 +106,9 @@ class MahasiswaRemoteDataSourceImpl implements MahasiswaRemoteDataSource {
   Future<void> deleteMahasiswa(String nim) async {
     http.Response response;
     try {
-      response = await client.delete(Uri.parse("$baseUrl/$nim")).timeout(const
-      Duration(seconds: 5));
+      response = await client
+          .delete(Uri.parse("$baseUrl/$nim"))
+          .timeout(const Duration(seconds: 5));
     } catch (e) {
       throw Exception("Gagal terhubung ke REST API ($baseUrl): $e");
     }

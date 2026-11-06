@@ -15,68 +15,91 @@ class MahasiswaPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("yoawn")),
-      body: BlocBuilder<MahasiswaBloc, MahasiswaState>(
-        builder: (context, state) {
-          if (state is MahasiswaInitial || state is MahasiswaLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is MahasiswaLoaded) {
-            final data = state.mahasiswaList;
-            if (data.isEmpty) {
-              return const Center(
-                child: Text("data masih kosong. tekan + untuk menambah."),
-              );
-            }
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, i) {
-                final mhs = data[i];
-                return ListTile(
-                  title: Text("${mhs.nama} (${mhs.nim})"),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("nim: ${mhs.nim}"),
-                      Text("nama: ${mhs.nama}"),
-                      Text("alamat: ${mhs.alamat}"),
-                      Text("namaAyah: ${mhs.namaAyah}"),
-                      Text("namaIbu: ${mhs.namaIbu}"),
-                      Text("domisili: ${mhs.domisili}"),
-                      Text("noTelp: ${mhs.noTelp}"),
-                      Text("email: ${mhs.email}"),
-                      Text("kodePost: ${mhs.kodePost}"),
-                      Text("kabupaten: ${mhs.kabupaten}"),
-                      Text("provinsi: ${mhs.provinsi}"),
-                      Text("fakultas: ${mhs.fakultas}"),
-                      Text("prodi: ${mhs.prodi}"),
-                      Text("konsentrasi: ${mhs.konsentrasi}"),
-                      Text("ipk: ${mhs.ipk}"),
-                    ],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          _showForm(context, bloc, mhs: mhs);
-                        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              onChanged: (query) => bloc.add(SearchMahasiswaEvent(query)),
+              decoration: InputDecoration(
+                hintText: " ",
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<MahasiswaBloc, MahasiswaState>(
+              builder: (context, state) {
+                if (state is MahasiswaInitial || state is MahasiswaLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is MahasiswaLoaded) {
+                  final data = state.mahasiswaList;
+                  if (data.isEmpty) {
+                    return Center(
+                      child: Text(
+                        state.query.isEmpty
+                            ? "data masih kosong. tekan + untuk menambah."
+                            : "Mahasiswa tidak ditemukan.",
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          bloc.add(DeleteMahasiswaEvent(mhs.nim));
-                        },
-                      ),
-                    ],
-                  ),
-                );
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, i) {
+                      final mhs = data[i];
+                      return ListTile(
+                        title: Text("${mhs.nama} (${mhs.nim})"),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("nim: ${mhs.nim}"),
+                            Text("nama: ${mhs.nama}"),
+                            Text("alamat: ${mhs.alamat}"),
+                            Text("namaAyah: ${mhs.namaAyah}"),
+                            Text("namaIbu: ${mhs.namaIbu}"),
+                            Text("domisili: ${mhs.domisili}"),
+                            Text("noTelp: ${mhs.noTelp}"),
+                            Text("email: ${mhs.email}"),
+                            Text("kodePost: ${mhs.kodePost}"),
+                            Text("kabupaten: ${mhs.kabupaten}"),
+                            Text("provinsi: ${mhs.provinsi}"),
+                            Text("fakultas: ${mhs.fakultas}"),
+                            Text("prodi: ${mhs.prodi}"),
+                            Text("konsentrasi: ${mhs.konsentrasi}"),
+                            Text("ipk: ${mhs.ipk}"),
+                          ],
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                _showForm(context, bloc, mhs: mhs);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                bloc.add(DeleteMahasiswaEvent(mhs.nim));
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                } else if (state is MahasiswaError) {
+                  return Center(child: Text(state.message));
+                }
+                return const SizedBox();
               },
-            );
-          } else if (state is MahasiswaError) {
-            return Center(child: Text(state.message));
-          }
-          return const SizedBox();
-        },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showForm(context, bloc),
